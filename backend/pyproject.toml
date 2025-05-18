@@ -29,6 +29,7 @@ dependencies = [
   "uvicorn[standard]",
   "httpx",
   "openai>=1.0.0",
+  "pydantic_settings"
 ]
 
 [project.urls]

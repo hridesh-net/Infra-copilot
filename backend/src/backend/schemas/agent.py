@@ -1,21 +1,27 @@
-from pydantic import BaseModel, Field
-from typing import Any
+from pydantic import BaseModel
+from typing import Optional
+from enum import Enum
+
+
+class AgentRole(str, Enum):
+    PROMPT_REFINER = "prompt_refiner"
+    PLANNER = "planner"
+    VALIDATOR = "validator"
+    TERRAFORM_GENERATOR = "terraform_generator"
+    USER_FOLLOWER = "user_follower"
+    EXECUTOR = "executor"
+    COST_ESTIMATOR = "cost_estimator"
 
 class AgentInput(BaseModel):
     """
-    Represents a natural language prompt input to the agent.
+    Input received by each agent — includes the shared context.
     """
-    prompt: str = Field(..., example="Create a 3-tier architecture with autoscaling and RDS")
+    context: dict
+    role: AgentRole
 
-class ResourceConfig(BaseModel):
+class AgentOutput(BaseModel):
     """
-    Represents configuration for a single resource in the infrastructure blueprint.
+    Output returned by each agent — updated context and trace.
     """
-    type: str = Field(..., example="ec2")
-    config: dict[str, Any] = Field(..., example={"instance_type": "t3.micro", "count": 2})
-
-class Blueprint(BaseModel):
-    """
-    Represents the agent-generated infrastructure blueprint to be converted into Terraform.
-    """
-    resources: list[ResourceConfig]
+    updated_context: dict
+    debug_trace: Optional[str] = None

@@ -1,13 +1,16 @@
-from pydantic import BaseModel, Field
+from typing import Optional
+from pydantic import BaseModel
 
 class LLMRequest(BaseModel):
     """
-    Represents a request sent to the LLM provider.
+    Request sent to LLM provider.
     """
-    prompt: str = Field(..., example="Generate Terraform code for an EC2 instance")
+    prompt: str
+    temperature: float = 0.2
 
 class LLMResponse(BaseModel):
     """
-    Represents a response returned from the LLM provider.
+    Raw response returned by LLM provider.
     """
-    content: str = Field(..., description="Raw text or JSON returned by the LLM")
+    content: str
+    tokens_used: Optional[int] = None
