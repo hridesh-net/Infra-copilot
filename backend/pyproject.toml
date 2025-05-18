@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "infra-copilot"
+dynamic = ["version"]
+description = 'infra-as-prompt for easy and fast Cloud Infrastructure manager.'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Hridesh Sharma", email = "hridesh.khandal@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "fastapi[standard]",
+  "uvicorn[standard]",
+  "httpx",
+  "openai>=1.0.0",
+]
+
+[project.urls]
+Documentation = "https://github.com/hridesh-net/Infra-copilot#readme"
+Issues = "https://github.com/hridesh-net/Infra-copilot/issues"
+Source = "https://github.com/hridesh-net/Infra-copilot/backend"
+
+[tool.hatch.version]
+path = "src/backend/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/backend"]
+
+[tool.hatch.envs.default]
+python = "3.10"
+
+[tool.hatch.envs.default.scripts]
+start = "fastapi dev main.py"
+lint = "ruff check ."
+format = "ruff format ."
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/backend tests}"
+
+[tool.coverage.run]
+source_pkgs = ["backend", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/backend/__about__.py",
+]
+
+[tool.coverage.paths]
+backend = ["src/backend", "*/backend/src/backend"]
+tests = ["tests", "*/backend/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
