@@ -101,3 +101,15 @@ Desktop.ini
 *.key
 *.crt
 .aws/
+
+# ─ Weaviate ─────────────────────────────────────────────────────────────────
+# local persistence data (default PERSISTENCE_DATA_PATH)
+data/
+# Docker volume mount for Weaviate persistence
+weaviate_data/
+# Embedded Weaviate client cache & data (if used)
+.cache/weaviate-embedded/
+.local/share/weaviate/
+# Weaviate configuration files
+weaviate.conf.json
+weaviate.conf.yaml

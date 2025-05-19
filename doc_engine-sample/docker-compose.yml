@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  weaviate:
+    image: semitechnologies/weaviate:latest
+    ports:
+      - "8080:8080"     # REST/GraphQL
+      - "50051:50051"   # gRPC health check
+      - "8300:8300"     # RAFT gossip
+    volumes:
+      - "./weaviate_data:/var/lib/weaviate"
+    environment:
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      QUERY_DEFAULTS_LIMIT: "20"
+      DEFAULT_VECTORIZER_MODULE: "none"
+      # ===== SINGLE-NODE RAFT SETTINGS =====
+      RAFT_BOOTSTRAP_EXPECT: "1"
+      CLUSTER_HOSTNAME: "node1"
+      RAFT_ENABLE_ONE_NODE_RECOVERY: "true"
+      # =====================================
