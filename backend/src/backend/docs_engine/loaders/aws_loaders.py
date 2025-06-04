@@ -1,9 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
-from backend.docs_engine.base_loader import BaseDocLoader
+from backend.src.backend.docs_engine.loaders.base_loader import BaseDocLoader
 
 class AWSLoader(BaseDocLoader):
-    def load(self, url: str) -> str:
+
+    async def load(self, url: str) -> str:
         """
         Fetches and extracts text from an AWS documentation page.
         """

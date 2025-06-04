@@ -11,10 +11,10 @@ logger = get_logger(__name__)
 async def ingest_docs(topic: str, urls: list[str]):
     """
     Orchestrates ingestion pipeline:
-      1. Crawl URLs to extract plain text
-      2. Chunk text into overlapping segments
-      3. Embed chunks into vectors
-      4. Upload vectors with metadata to Weaviate
+        1. Crawl URLs to extract plain text
+        2. Chunk text into overlapping segments
+        3. Embed chunks into vectors
+        4. Upload vectors with metadata to Weaviate
     """
     # Crawl all URLs in parallel
     print(f"doc manager started for {topic} and URL: {urls}")

@@ -1,18 +1,24 @@
-from sentence_transformers import SentenceTransformer
-from backend.docs_engine.weaviate_client import get_weaviate_client
+from openai import OpenAI
+from docs_engine.config import OPENAI_API_KEY, EMBEDDING_MODEL
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
+op_client = OpenAI(api_key=OPENAI_API_KEY)
 
-
-def embed_and_store(chunks: list[str], source_url: str):
-    """
-    Embeds each chunk and stores it in Weaviate.
-    """
-    client = get_weaviate_client()
-    for chunk in chunks:
-        vec = model.encode(chunk).tolist()
-        client.data_object.create(
-            data_object={"content": chunk, "source": source_url},
-            class_name="AWSDoc",
-            vector=vec
+def embed_chunks(
+    chunks: list[dict],
+    batch_size: int = 50
+) -> list[dict]:
+    embeddings: list[dict] = []
+    for i in range(0, len(chunks), batch_size):
+        batch = chunks[i : i + batch_size]
+        resp = op_client.embeddings.create(
+            model=EMBEDDING_MODEL,
+            input=[c["text"] for c in batch],
         )
+        for c, item in zip(batch, resp.data):
+            embeddings.append({
+                "vector": item.embedding,
+                "text": c["text"],
+                "metadata": c["metadata"],
+            })
+
+    return embeddings
