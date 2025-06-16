@@ -1,5 +1,5 @@
 from openai import OpenAI
-from docs_engine.config import OPENAI_API_KEY, EMBEDDING_MODEL
+from src.backend.docs_engine.config import OPENAI_API_KEY, EMBEDDING_MODEL
 
 op_client = OpenAI(api_key=OPENAI_API_KEY)
 

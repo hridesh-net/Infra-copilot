@@ -5,8 +5,9 @@ import tempfile
 from bs4 import BeautifulSoup
 
 class Crawler:
+
     @classmethod
-    async def fetch_html(self, url: str) -> str:
+    async def fetch_html(cls, url: str) -> str:
         """Fetches an HTML page and return it's text content.
 
         Args:
@@ -22,7 +23,7 @@ class Crawler:
         return resp.text
 
     @classmethod
-    async def fetch_pdf(self, url: str) -> str:
+    async def fetch_pdf(cls, url: str) -> str:
         """Downloads PDF and extracts its texts
 
         Args:
@@ -46,7 +47,7 @@ class Crawler:
         return text
 
     @classmethod
-    async def crawl_url(self, url: str) -> str:
+    async def crawl_url(cls, url: str) -> str:
         """Detect content type and fetch accordingly.
 
         Args:
@@ -56,9 +57,9 @@ class Crawler:
             str: return parsed meaning full content
         """
         if url.lower().endswith('.pdf'):
-            return await self.fetch_pdf(url)
+            return await cls.fetch_pdf(url)
         else:
-            html = await self.fetch_html(url)
+            html = await cls.fetch_html(url)
 
             soup = BeautifulSoup(html, 'html.parser')
             for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
