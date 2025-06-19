@@ -1,6 +1,7 @@
 import os
 import weaviate
 import weaviate.classes.config as wc
+from weaviate.classes.query import MetadataQuery
 
 from urllib.parse import urlparse
 
@@ -89,11 +90,36 @@ class WeaviateClient:
         Search the collection using a vector query.
         """
         cls._init_client()
-        results = cls._client.query \
-            .get(cls.CLASS_NAME, ["text", "url", "service", "topic", "chunk_id"]) \
-            .with_tenant(tenant) \
-            .with_near_vector({"vector": vector, "certainty": 0.7}) \
-            .with_limit(top_k) \
-            .do()
+        collection = cls._client.collections.get(cls.CLASS_NAME)
 
-        return results.get("data", {}).get("Get", {}).get(cls.CLASS_NAME, [])
+        multi_tenantA = collection.with_tenant(tenant)
+
+#         """near_text(
+#     query="animals in movies",
+#     limit=2,
+#     return_metadata=MetadataQuery(distance=True)
+# )"""
+
+        res = multi_tenantA.query.near_vector(
+            near_vector=vector,
+            limit=top_k,
+            return_metadata=MetadataQuery(distance=True)
+        )
+
+        # # Perform a vector similarity query using the v4 API
+        # response = collection.query.near_vector(
+        #     near_vector=vector,
+        #     limit=top_k,
+        #     certainty=0.7,
+        #     return_metadata=MetadataQuery(certainty=True),
+        #     tenant=tenant
+        # )
+
+        # Map the returned objects to plain dicts including properties and certainty
+        return [
+            {
+                **obj.properties,
+                "_additional": {"certainty": obj.metadata.certainty}
+            }
+            for obj in res.objects
+        ]

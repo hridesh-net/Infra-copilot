@@ -2,6 +2,7 @@ from fastapi import BackgroundTasks
 
 from src.backend.core.logger import get_logger
 from src.backend.docs_engine.loaders.aws_loaders import AWSLoader
+from src.backend.docs_engine.retriver import retrieve_relevant_chunks
 
 
 class DocEngineService:
@@ -17,3 +18,8 @@ class DocEngineService:
         background_tasks.add_task(aws_loader.ingest_all_aws_docs)
 
         return {"message": f"Started background syncing process for {doc_name} docs"}
+
+    @classmethod
+    def ret_docs(cls, query: str, tenant: str):
+        res = retrieve_relevant_chunks(query, tenant)
+        return res

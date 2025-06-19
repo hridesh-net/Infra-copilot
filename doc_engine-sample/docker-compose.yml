@@ -17,3 +17,34 @@ services:
       CLUSTER_HOSTNAME: "node1"
       RAFT_ENABLE_ONE_NODE_RECOVERY: "true"
       # =====================================
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333"   # HTTP API
+      - "6334:6334"   # gRPC API
+    volumes:
+      - ./qdrant_data:/qdrant/storage
+    environment:
+      QDRANT__SERVICE__ENABLE_TELEMETRY: "false"
+
+# version: '3.4'
+# services:
+#   weaviate:
+#     platform: linux/arm64
+#     image: semitechnologies/weaviate:latest
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       QUERY_DEFAULTS_LIMIT: 25
+#       AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+#       PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+#       DEFAULT_VECTORIZER_MODULE: "none"
+#       CLUSTER_HOSTNAME: "node1"
+#     volumes:
+#       - weaviate_data:/var/lib/weaviate
+#     restart: unless-stopped
+
+# volumes:
+#   weaviate_data:

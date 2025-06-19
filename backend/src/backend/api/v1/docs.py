@@ -9,3 +9,9 @@ doc_router = APIRouter()
 async def sync_docs(doc_name: str, background_tasks: BackgroundTasks):
     resp = DocEngineService.sync_docs(doc_name=doc_name, background_tasks=background_tasks)
     return resp
+
+
+@doc_router.get("ret_doc/{query}")
+async def ret_doc(query: str, tenant: str = "AWS"):
+    resp = DocEngineService.ret_docs(query=query, tenant=tenant)
+    return resp

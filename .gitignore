@@ -107,6 +107,7 @@ Desktop.ini
 data/
 # Docker volume mount for Weaviate persistence
 weaviate_data/
+qdrant_data/
 # Embedded Weaviate client cache & data (if used)
 .cache/weaviate-embedded/
 .local/share/weaviate/

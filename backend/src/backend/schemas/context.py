@@ -1,7 +1,7 @@
 from typing import Optional, Any
 from pydantic import BaseModel, Field
-from backend.schemas.blueprint import Blueprint
-from backend.schemas.terraform import TerraformArtifact
+from src.backend.schemas.blueprint import Blueprint
+from src.backend.schemas.terraform import TerraformArtifact
 from enum import Enum
 
 class ExecutionState(str, Enum):
@@ -29,3 +29,12 @@ class GlobalContext(BaseModel):
     state_node: Optional[str] = None
 
     metadata: dict[str, Any] = Field(default_factory=dict)
+
+class DocChunk(BaseModel):
+    """
+    A document chunk retrieved from the embedding store.
+    """
+    content: str
+    source: Optional[str] = None
+    score: Optional[float] = None  # Optional similarity score
+    metadata: Optional[dict] = None
