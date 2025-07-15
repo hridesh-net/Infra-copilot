@@ -14,3 +14,8 @@ class LLMResponse(BaseModel):
     """
     content: str
     tokens_used: Optional[int] = None
+
+
+class PromptRequest(BaseModel):
+    prompt: str
+    platform: str
