@@ -6,7 +6,6 @@ from src.backend.agents.base import Agent
 from src.backend.utils.llm_response import extract_llm_dict
 
 
-
 GROQ_API_KEY = ""
 
 
@@ -18,9 +17,9 @@ class PromptGenerator(Agent):
         self.inference = "GROQ"
 
         self.agent_prompt = (
-            "You are an expert prompt engineer. "
+            "You are an expert prompt engineer And you only Genereate Prompt which exactly defins in details what needs to be done. "
             "Output valid JSON only, with exactly one top-level key named "
-            "`prompt`. Do NOT include any other keys, code fences, markdown, "
+            "`prompt`. Do NOT include any other keys, code fences, markdown, or Cloudformation Scripts "
             "or extra text. Your response must begin with '{' and end with '}'."
         )
 
@@ -51,6 +50,29 @@ class PromptGenerator(Agent):
         return (usr_prompt, platform, other_config)
 
     def decide(self, observation: tuple[str, str, dict[str, Any]]):
+
+        # if doc_type == ["invoice"]:
+        #     self.agent_prompt = (
+        #         "You are an analyzer and you need to return valid json by extracting the data for the PDF content you get"
+        #         "the valid json should only contain following top-level keys:"
+        #         "[Invoice_no., Total amount, items(should be list of dictiory of the items), ...]"
+        #         "output should look like"
+        #         "```json
+        #         {
+        #             invice_no: 456,
+        #             items: [
+        #                 {
+        #                     item_code: int,
+        #                     item_name: string,
+        #                     intem_charged_amount: int
+        #                 },
+        #                 {
+        #                 }
+        #             ]
+        #         }
+        #         "
+        #     )
+
         print("in decide")
         usr_prompt, platform, other_config = observation
 
@@ -59,7 +81,11 @@ class PromptGenerator(Agent):
             {"role": "user", "content": usr_prompt},
         ]
 
+        print(f"here is message {messages}")
+
         self.llm_params["messages"] = messages
+
+        print(f"llm params: {self.llm_params}")
 
         url = ""
         headers = {}

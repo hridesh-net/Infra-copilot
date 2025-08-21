@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from src.backend.schemas.llm import LLMRequest, PromptRequest
 
 from src.backend.services.test_agents.agent_servce import test_prompt_gen
+from src.backend.services.test_agents.agent_servce import test_blueprint_gen
 
 
 agent_router = APIRouter()
@@ -20,3 +21,13 @@ async def prompt_gen(request: PromptRequest):
     print(type(data))
 
     return await test_prompt_gen(data)
+
+
+@agent_router.post("/test/bpgen")
+async def blueprint_gen(request: PromptRequest):
+    print("##### Start #####")
+    data: dict[str, str] = request.model_dump()
+    print(data)
+    print(type(data))
+
+    return await test_blueprint_gen(data)

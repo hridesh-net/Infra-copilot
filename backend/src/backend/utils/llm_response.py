@@ -12,7 +12,9 @@ def extract_llm_dict(response: dict[str, Any]) -> dict[str, Any]:
         json.JSONDecodeError if the stripped content is not valid JSON.
     """
     # 1) Pull out the raw content string
+    print(f"here with data {response}")
     content = response["choices"][0]["message"]["content"].strip()
+    print(f"conetent: {content}")
 
     # 2) Remove markdown code fences if present
     #    This covers both ```json ... ``` and ``` ... ```

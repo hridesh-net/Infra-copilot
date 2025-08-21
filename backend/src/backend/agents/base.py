@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Any
 
+# from src.backend.core.context import context
 class Agent(ABC):
     """
     Abstract base class for all Agents in an agentic workflow.
@@ -13,9 +14,11 @@ class Agent(ABC):
         Subclasses should call super().__init__() if they override this.
         :param config: Optional dict of parameters (e.g. API keys, model weights, thresholds)
         """
+
         self.config = config or {}
         self.internal_state: dict[str, Any] = {}
         self._initialized = False
+        # self.context = context
 
     def initialize(self) -> None:
         """
